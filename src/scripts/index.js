@@ -1,80 +1,155 @@
 import '../styles/index.scss';
 import words from './words';
 
-const secret = words[Math.floor((words.length-1)*Math.random())];
+class PlaceholderFactory {
+    generatePlaceholder(placeholder) {
+        switch(placeholder) {
+            case 'underscore': return '_';
+            default: return placeholderFactory(placeholder);
+        }
+    }
 
-document.addEventListener('DOMContentLoaded', function() {
-    captureInput();
-    repaint();
-    setFocus()
-}, false);
+    getRandomWord() {
+        let i;
+        try {
+            i = Math.floor(Math.random() * new Date().getHours() * new Date().getMinutes());
+        } catch(e) {
+            console.log(e);
+            this.getRandomWord();
+        }
+        return words[i] ? words[i] : this.getRandomWord();
+    }
 
-const placeholder = '_';
+    doSomething(dokumentet, stringen, hva) {
+        switch(hva) {
+            case 'hentGreia ;)': return document.getElementById(stringen);
+            case 'linjeskift': return '\n';
+            case 'linjeskiftlinjeskift': return this.doSomething(document, '', 'linjeskift') + this.doSomething(document, '', 'linjeskift');
+        }
+    }
+}
+
+const placeholder = new PlaceholderFactory().generatePlaceholder('underscore');
 const guesses = {};
 const chances = 6;
 
-function setFocus() {
-    document.getElementById('guess').focus();
-}
+const secret = new PlaceholderFactory().getRandomWord();
 
-function captureInput() {
-    document.getElementById('hangman').addEventListener('submit', function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+     new PlaceholderFactory().doSomething(document, 'hangman', 'hentGreia ;)').addEventListener('submit', function(e) {
         e.preventDefault();
-        const guess = document.getElementById('guess');
-        tryGuess(guess.value);
+        const guess = new PlaceholderFactory().doSomething(document, 'guess', 'hentGreia ;)');
+        if (guess.value === undefined || guess.value.length !== 1) {
+            return;
+        }
+        guesses[guess.value] = true;
+            new PlaceholderFactory().doSomething(document, 'progress', 'hentGreia ;)').innerHTML = (() => {
+                const result = [];
+            
+                for (let i = 0; i < secret.length; i++) {
+                const char = secret.charAt(i);
+                    result.push(char in guesses ? char : placeholder);
+                }
+            
+                return result;
+            })().join(' ');
+                new PlaceholderFactory().doSomething(document, 'progress', 'hentGreia ;)').innerHTML += new PlaceholderFactory().doSomething(document, '', 'linjeskiftlinjeskift') + 'Misses: ' + (() => {
+                const result = [];
+
+                for (const guess in guesses) {
+                    if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
+                        result.push(guess);
+                    }
+                }
+                return result
+            })().join(', ');
+                new PlaceholderFactory().doSomething(document, 'progress', 'hentGreia ;)').innerHTML += new PlaceholderFactory().doSomething(document, '', 'linjeskiftlinjeskift') +  new PlaceholderFactory().doSomething(document, 'gallow-' + (chances - (() => {
+                    const result = [];
+    
+                    for (const guess in guesses) {
+                        if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
+                            result.push(guess);
+                        }
+                    }
+                    return result
+                })().length), 'hentGreia ;)').innerHTML;
+                if ((() => {
+                    const result = [];
+                
+                    for (let i = 0; i < secret.length; i++) {
+                    const char = secret.charAt(i);
+                        result.push(char in guesses ? char : placeholder);
+                    }
+                
+                    return result;
+                })().indexOf(placeholder) === -1) {
+                    new PlaceholderFactory().doSomething(document, 'hangman', 'hentGreia ;)').innerHTML = 'You won!';
+                } else if ((() => {
+                    const result = [];
+    
+                    for (const guess in guesses) {
+                        if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
+                            result.push(guess);
+                        }
+                    }
+                    return result
+                })().length >= chances) {
+                    new PlaceholderFactory().doSomething(document, 'hangman', 'hentGreia ;)').innerHTML = 'You lost!';
+                };
         guess.value = '';
-    }, false);
-}
+    }, !true);
+    new PlaceholderFactory().doSomething(document, 'progress', 'hentGreia ;)').innerHTML = (() => {
+        const result = [];
+    
+        for (let i = 0; i < secret.length; i++) {
+        const char = secret.charAt(i);
+            result.push(char in guesses ? char : placeholder);
+        }
+    
+        return result;
+    })().join(' ');
+    new PlaceholderFactory().doSomething(document, 'progress', 'hentGreia ;)').innerHTML += new PlaceholderFactory().doSomething(document, '', 'linjeskiftlinjeskift') + 'Misses: ' + (() => {
+        const result = [];
 
-const tryGuess = function(guess) {
-    if (guess === undefined || guess.length !== 1) {
-        return;
-    }
-    guesses[guess] = true;
-    repaint();
-}
+        for (const guess in guesses) {
+            if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
+                result.push(guess);
+            }
+        }
+        return result
+    })().join(', ');
+    new PlaceholderFactory().doSomething(document, 'progress', 'hentGreia ;)').innerHTML += new PlaceholderFactory().doSomething(document, '', 'linjeskiftlinjeskift') + new PlaceholderFactory().doSomething(document, 'gallow-' + (chances - (() => {
+        const result = [];
 
-function repaint() {
-    const progress_ele = document.getElementById('progress');
-    const progress = getProgress();
-    const misses = getMisses();
-    const chances_left = (chances - misses.length);
-    const gallow_ascii = document.getElementById('gallow-' + chances_left).innerHTML;
+        for (const guess in guesses) {
+            if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
+                result.push(guess);
+            }
+        }
+        return result
+    })().length), 'hentGreia ;)').innerHTML;
+    if ((() => {
+        const result = [];
+    
+        for (let i = 0; i < secret.length; i++) {
+        const char = secret.charAt(i);
+            result.push(char in guesses ? char : placeholder);
+        }
+    
+        return result;
+    })().indexOf(placeholder) === -1) {
+        new PlaceholderFactory().doSomething(document, 'hangman', 'hentGreia ;)').innerHTML = 'You won!';
+    } else if ((() => {
+        const result = [];
 
-    progress_ele.innerHTML = progress.join(' ');
-
-    progress_ele.innerHTML += '\n\nMisses: ' + misses.join(', ');
-    progress_ele.innerHTML += '\n\n' + gallow_ascii;
-
-    if (progress.indexOf(placeholder) === -1) {
-        finish('You won!');
-    } else if (misses.length >= chances) {
-        finish('You lost!');
-    }
-}
-
-function getProgress() {
-    const result = [];
-
-    for (let i = 0; i < secret.length; i++) {
-    const char = secret.charAt(i);
-        result.push(char in guesses ? char : placeholder);
-    }
-
-    return result;
-};
-
-function getMisses() {
-    const result = [];
-
-    for (const guess in guesses) {
-      if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
-        result.push(guess);
-      }
-    }
-    return result;
-};
-
-function finish(msg) {
-    document.getElementById('hangman').innerHTML = msg;
-}
+        for (const guess in guesses) {
+            if (guesses.hasOwnProperty(guess) && secret.indexOf(guess) === -1) {
+                result.push(guess);
+            }
+        }
+        return result
+    })().length >= chances) {
+        new PlaceholderFactory().doSomething(document, 'hangman', 'hentGreia ;)').innerHTML = 'You lost!';
+    };
+    new PlaceholderFactory().doSomething(document, 'guess', 'hentGreia ;)').focus();
+}, !true);
